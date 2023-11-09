@@ -1,9 +1,14 @@
+using TenDrone.Resources;
+
 namespace TenDrone.Models 
 {
+  
   public class Drone
   {
-      public int Id { get; set; }
-      public string? Name { get; set; }
-      public string? Description { get; set; }
+      public string SerialNumber { get; set; }
+      public DroneModel Model { get; set; }
+      public double WeightLimit { get; set; }
+      public int BatteryCapacity { get; set; }
+      public DroneState State { get; set; }
   }
 }
