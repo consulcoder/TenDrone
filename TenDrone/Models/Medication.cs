@@ -6,8 +6,15 @@ namespace TenDrone.Models
     {
         [Key]
         public string Code { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public double Weight { get; set; }
+        [Required]
         public string Image { get; set; }
-}
+        
+        public string DroneId { get; set; }
+        [Required]
+        public Drone Drone { get; set; }
+    }
 }

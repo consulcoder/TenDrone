@@ -2,7 +2,7 @@ namespace TenDrone.Resources
 {
   public enum DroneModel
   {
-      Lightweight,
+      Lightweight = 1,
       Middleweight,
       Cruiserweight,
       Heavyweight

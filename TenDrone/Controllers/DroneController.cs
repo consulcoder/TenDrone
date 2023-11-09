@@ -9,19 +9,22 @@ namespace TenDrone.Controllers;
 [Route("api/drones")]
 public class DroneController : ControllerBase
 {
-    private readonly IDroneService _droneService;
+    private readonly ILogger<DroneController> _logger;
+        private readonly IDroneService _droneService;
 
-    public DroneController(IDroneService droneService)
+    public DroneController(IDroneService droneService, ILogger<DroneController> logger)
     {
         _droneService = droneService;
+        _logger = logger;
     }
 
     [HttpPost]
+    [Route("add")]
     public IActionResult RegisterDrone([FromBody] RegisterDroneRequest request)
     {
         try
         {
-            _droneService.RegisterDrone(request.SerialNumber, request.Weight, request.BatteryLevel);
+            _droneService.RegisterDrone(request);
             return Ok("Drone registered successfully.");
         }
         catch (Exception ex)
@@ -30,13 +33,42 @@ public class DroneController : ControllerBase
         }
     }
 
+    [HttpPost]
+    [Route("add-medications")]
+    public IActionResult AddItem([FromBody] AddMedicationRequest request)
+    {
+        try
+        {
+            _droneService.AddItem(request);
+            return Ok("Items added successfully.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    [Route("medications/{serialNumber}")]
+    public IEnumerable<Medication> GetItems(string serialNumber)
+    {
+        return _droneService.GetItems(serialNumber);
+    }
+
     [HttpGet]
     public IEnumerable<Drone> GetDrones()
     {
         return _droneService.GetDrones();
     }
 
-    [HttpGet("{serialNumber}")]
+    [HttpGet]
+    [Route("available")]
+    public IEnumerable<Drone> GetAvailableDrones()
+    {
+        return _droneService.GetAvailableDrones();
+    }
+
+    [HttpGet("details/{serialNumber}")]
     public IActionResult GetDroneBySerialNumber(string serialNumber)
     {
         var drone = _droneService.GetDroneBySerialNumber(serialNumber);
@@ -47,6 +79,12 @@ public class DroneController : ControllerBase
         }
 
         return Ok(drone);
+    }
+
+    [HttpGet("battery/{serialNumber}")]
+    public IActionResult GetDroneBatteryBySerialNumber(string serialNumber)
+    {
+        return Ok(_droneService.GetDroneBatteryBySerialNumber(serialNumber));
     }
 
     [HttpPut("{serialNumber}")]

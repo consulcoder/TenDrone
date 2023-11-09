@@ -2,7 +2,7 @@ namespace TenDrone.Resources
 {
 public enum DroneState
   {
-      IDLE,
+      IDLE = 1,
       LOADING,
       LOADED,
       DELIVERING,
