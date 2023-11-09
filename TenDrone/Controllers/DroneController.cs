@@ -16,6 +16,20 @@ public class DroneController : ControllerBase
         _droneService = droneService;
     }
 
+    [HttpPost]
+    public IActionResult RegisterDrone([FromBody] RegisterDroneRequest request)
+    {
+        try
+        {
+            _droneService.RegisterDrone(request.SerialNumber, request.Weight, request.BatteryLevel);
+            return Ok("Drone registered successfully.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpGet]
     public IEnumerable<Drone> GetDrones()
     {
@@ -33,20 +47,6 @@ public class DroneController : ControllerBase
         }
 
         return Ok(drone);
-    }
-
-    [HttpPost]
-    public IActionResult LoadDrone([FromBody] LoadDroneRequest request)
-    {
-        try
-        {
-            _droneService.LoadDrone(request.SerialNumber, request.Weight, request.BatteryLevel);
-            return Ok("Drone loaded successfully.");
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
     }
 
     [HttpPut("{serialNumber}")]

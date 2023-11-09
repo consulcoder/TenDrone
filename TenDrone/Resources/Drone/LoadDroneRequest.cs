@@ -1,5 +1,5 @@
 namespace TenDrone.Resources;
-public class LoadDroneRequest
+public class RegisterDroneRequest
 {
     public string SerialNumber { get; set; }
     public double Weight { get; set; }

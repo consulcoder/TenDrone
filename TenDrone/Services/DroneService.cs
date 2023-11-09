@@ -7,7 +7,9 @@ namespace TenDrone.Services
     {
         IEnumerable<Drone> GetDrones();
         Drone GetDroneBySerialNumber(string serialNumber);
-        void LoadDrone(string serialNumber, double weight, int batteryLevel);
+        void RegisterDrone(string serialNumber, double weight, int batteryLevel);
+        IEnumerable<Medication> GetItems();
+        IEnumerable<Drone> GetAvailableDrones();
         void UpdateDrone(string serialNumber, UpdateDroneRequest request);
         void DeleteDrone(string serialNumber);
     }
@@ -30,7 +32,7 @@ namespace TenDrone.Services
             return em.Drones.FirstOrDefault(d => d.SerialNumber == serialNumber);
         }
 
-        public void LoadDrone(string serialNumber, double weight, int batteryLevel)
+        public void RegisterDrone(string serialNumber, double weight, int batteryLevel)
         {
             var existingDrone = em.Drones.FirstOrDefault(d => d.SerialNumber == serialNumber);
 
@@ -39,10 +41,10 @@ namespace TenDrone.Services
                 throw new InvalidOperationException($"Drone with serial number '{serialNumber}' already exists.");
             }
 
-            if (batteryLevel < 25)
-            {
-                throw new InvalidOperationException($"Cannot load the drone with serial number '{serialNumber}' when battery level is below 25%.");
-            }
+            // if (batteryLevel < 25)
+            // {
+            //     throw new InvalidOperationException($"Cannot load the drone with serial number '{serialNumber}' when battery level is below 25%.");
+            // }
 
             var newDrone = new Drone
             {
@@ -50,11 +52,21 @@ namespace TenDrone.Services
                 Model = DroneModel.Lightweight,
                 WeightLimit = 500,
                 BatteryCapacity = batteryLevel,
-                State = DroneState.LOADED
+                State = DroneState.IDLE
             };
 
             em.Drones.Add(newDrone);
             em.SaveChanges();
+        }
+
+        public IEnumerable<Medication> GetItems()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Drone> GetAvailableDrones()
+        {
+            throw new NotImplementedException();
         }
 
         public void UpdateDrone(string serialNumber, UpdateDroneRequest request)
@@ -94,6 +106,7 @@ namespace TenDrone.Services
             em.Drones.Remove(drone);
             em.SaveChanges();
         }
+        
     }
 
 }
