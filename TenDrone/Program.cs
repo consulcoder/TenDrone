@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TenDrone.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//Add dbContext, here you can we are using In-memory database.
-builder.Services.AddDbContext<EntityManager>();
+// Add dbContext, here you can we are using In-memory database.
+builder.Services.AddDbContext<EntityManager>(opt=>opt.UseInMemoryDatabase("TenDrone"));
+// Add Services
+builder.Services.AddScoped<IDroneService, DroneService>();
 
 
 var app = builder.Build();
@@ -20,6 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 
 

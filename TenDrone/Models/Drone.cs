@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using TenDrone.Resources;
 
 namespace TenDrone.Models 
@@ -5,6 +6,7 @@ namespace TenDrone.Models
   
   public class Drone
   {
+      [Key]
       public string SerialNumber { get; set; }
       public DroneModel Model { get; set; }
       public double WeightLimit { get; set; }
