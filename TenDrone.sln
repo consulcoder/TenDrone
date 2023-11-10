@@ -5,6 +5,8 @@ VisualStudioVersion = 25.0.1703.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TenDrone", "TenDrone\TenDrone.csproj", "{22A45AEE-1E14-4C0D-AD45-EEC0251BA6FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TenDrone.Tests", "TenDrone.Tests\TenDrone.Tests.csproj", "{4959B1B1-8882-4B48-B872-6C4B06575E5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{22A45AEE-1E14-4C0D-AD45-EEC0251BA6FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22A45AEE-1E14-4C0D-AD45-EEC0251BA6FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22A45AEE-1E14-4C0D-AD45-EEC0251BA6FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4959B1B1-8882-4B48-B872-6C4B06575E5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4959B1B1-8882-4B48-B872-6C4B06575E5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4959B1B1-8882-4B48-B872-6C4B06575E5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4959B1B1-8882-4B48-B872-6C4B06575E5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

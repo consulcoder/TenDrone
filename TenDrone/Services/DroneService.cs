@@ -11,11 +11,14 @@ namespace TenDrone.Services
         RegisterDroneRequest GetDroneBySerialNumber(string serialNumber);
         int GetDroneBatteryBySerialNumber(string serialNumber);
         void RegisterDrone(RegisterDroneRequest registerDroneRequest);
-        void AddItem(AddMedicationRequest medication);
+        Task<int> AddItem(AddMedicationRequest medication);
         IEnumerable<Medication> GetItems(string serialNumber);
         IEnumerable<Drone> GetAvailableDrones();
         void UpdateDrone(string serialNumber, UpdateDroneRequest request);
         void DeleteDrone(string serialNumber);
+        void AddAudit(History audit);
+        void AddAudit(IEnumerable<History> audits);
+        IEnumerable<History> GetHistory(int top = 100);
     }
 
     public class DroneService : IDroneService
@@ -80,7 +83,7 @@ namespace TenDrone.Services
             em.SaveChanges();
         }
 
-        public void AddItem(AddMedicationRequest rq)
+        public async Task<int> AddItem(AddMedicationRequest rq)
         {
             var drone = repo.GetDroneBySerialNumber(rq.SerialNumber);
 
@@ -88,24 +91,23 @@ namespace TenDrone.Services
             {
                 throw new InvalidOperationException($"Drone with serial number '{rq.SerialNumber}' no exists.");
             }
-            
-            try {
-                var list = GetItems(rq.SerialNumber).ToList(); //In memory does'nt create RelationShip (!) Remove this line with other dsn
-                // GET new Items
-                list.AddRange(rq.Medications.Select(m=>m.Adapt(new Medication(){ Drone = drone})).ToList());
-                // Add new Items
-                var w = GetMedicationsWeight(list);
-                if(w > drone.WeightLimit)
-                    throw new InvalidOperationException($"Cannot add Items the drone with serial number '{drone.SerialNumber}' when weight is high {drone.WeightLimit}.");
-                drone.CurrentWeight = w;
-                //drone.AddMedications(list);
-                // Save
-                em.Medications.AddRange(list);
-                em.SaveChanges();
-            }
-            catch(Exception ex) {
-                throw ex;
-            }
+
+            // GET new Items
+            //In memory does'nt create RelationShip (!) Remove this line with other dsn
+            var list = GetItems(rq.SerialNumber).ToList(); 
+            list.AddRange(rq.Medications.Select(m=>m.Adapt(new Medication(){ DroneId = rq.SerialNumber })).ToList());
+
+            // Add new Items
+            var w = GetMedicationsWeight(list);
+            if(w > drone.WeightLimit)
+                throw new InvalidOperationException($"Cannot add Items the drone with serial number '{drone.SerialNumber}' when weight is high {drone.WeightLimit}.");
+            drone.CurrentWeight = w;
+            //drone.AddMedications(list);
+            // Save
+
+            em.Medications.AddRange(list);
+            await em.SaveChangesAsync();
+            return 1;
             
         }
         protected double GetMedicationsWeight(List<Medication> medications) {
@@ -171,6 +173,22 @@ namespace TenDrone.Services
             em.SaveChanges();
         }
 
+        public async void AddAudit(History audit)
+        {
+            em.History.Add(audit);
+            em.SaveChangesAsync();
+        }
+
+        public IEnumerable<History> GetHistory(int top = 100)
+        {
+            return em.History.OrderByDescending(h=>h.Time).Take(top);
+        }
+
+        public void AddAudit(IEnumerable<History> audits)
+        {
+            em.History.AddRange(audits);
+            em.SaveChanges();
+        }
     }
 
 }
