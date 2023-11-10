@@ -35,11 +35,11 @@ public class DroneController : ControllerBase
 
     [HttpPost]
     [Route("add-medications")]
-    public IActionResult AddItem([FromBody] AddMedicationRequest request)
+    public async Task<IActionResult> AddItem([FromBody] AddMedicationRequest request)
     {
         try
         {
-            _droneService.AddItem(request);
+            await _droneService.AddItem(request);
             return Ok("Items added successfully.");
         }
         catch (Exception ex)

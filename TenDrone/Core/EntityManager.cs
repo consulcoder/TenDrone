@@ -7,6 +7,7 @@ public class EntityManager:DbContext
 
     public DbSet<Drone> Drones => Set<Drone>();
     public DbSet<Medication> Medications => Set<Medication>();
+    public DbSet<History> History => Set<History>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
