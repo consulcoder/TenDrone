@@ -11,7 +11,9 @@ dotnet build
 
 ## RUN
 
-dotnet run
+dotnet run --project=TenDrone
+
+'''open http://localhost:5172/swagger/index.html'''
 
 ## RUN Tests
 
